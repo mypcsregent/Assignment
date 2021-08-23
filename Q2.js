@@ -20,7 +20,7 @@ function Func2(N,ResultOfF1) {
         }
         else{
             var Z= N*N;
-            resolve (Z,ResultOfF1);
+            resolve ([Z,ResultOfF1]);
     }
 });
 }
@@ -40,7 +40,8 @@ function BaseFunction()
         var N= ResultOfF1*n;
         return Func2(N,ResultOfF1);
     })
-    .then(ResultofF2,ResultOfF1=>{
+    .then(L=>{
+        var ResultofF2=L[0],ResultOfF1=L[1];
         console.log(`Result of F2: ${ResultofF2}`);
         var Nk= ResultOfF1+ResultofF2;
         var N3;
