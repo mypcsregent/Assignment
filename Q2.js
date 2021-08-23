@@ -1,34 +1,57 @@
-/*write a function which has to call 2 different callback functions. 
-The response of first function should be passed to second function 
-and response of second function should be returned as response
-
-Implement the same above requirement using promises.
-*/
-
-function cubes(Z){
-    console.log(Z*Z*Z);
-}
-
-function odd_even(N){
-    if (N%2===0) {
-        console.log("The sum is even, The sum will be halved");
-        var Z=N/2;
-    }
-    else{
-        console.log("The Sum is odd, the sum will be doubled");
-        var Z=N*2;
-    }
+function Func1(num1,num2) {
+    var summ=num1+num2;
     return new Promise(function(resolve,reject){
-        resolve(cubes(Z));
+
+        if(isNaN(num1) || isNaN(num2)){
+			reject('invalid parameters');
+        }
+        else{
+            if(summ>=0) console.log(`sum of ${num1} and ${num2} is Positive`);
+            else console.log(`sum of ${num1} and ${num2} is Negative`);
+            return resolve(summ);
+    }
     });
 }
 
-function Add_numbers(num1,num2){
-    var Summ=num1+num2;
-    return new Promise(function(resolve,reject){
-        console.log(`Sum of Num1 = ${num1} and Num2 = ${num2} is ${Summ} `);
-        resolve(odd_even(Summ));
-    });
+function Func2(N,ResultOfF1) {
+    return new Promise((resolve,reject)=>{
+        if(isNaN(N)){
+			reject('invalid parameters');
+        }
+        else{
+            var Z= N*N;
+            resolve (Z,ResultOfF1);
+    }
+});
 }
 
-Add_numbers(5,4);
+function Func3(Z) {
+    console.log(`Resulf of F3:${Z*Z*Z}`);
+}
+
+function BaseFunction() 
+{
+    var N1=-5,N2=7;
+    Func1(N1,N2).then(ResultOfF1=> {
+        console.log(`Result of F1: ${ResultOfF1}`);
+        var n;
+        if(ResultOfF1>=0) n=1;
+        else n=-1;
+        var N= ResultOfF1*n;
+        return Func2(N,ResultOfF1);
+    })
+    .then(ResultofF2,ResultOfF1=>{
+        console.log(`Result of F2: ${ResultofF2}`);
+        var Nk= ResultOfF1+ResultofF2;
+        var N3;
+        if (Nk%2===0) N3=N1;
+        else N3=N2;
+        var X=(N3==N1? N2: N1);
+        console.log(`chosen number: ${N3} instead of ${X}`);
+        return Func3(N3);
+    })
+    .catch(message => console.log(message));
+}
+
+BaseFunction();
+
